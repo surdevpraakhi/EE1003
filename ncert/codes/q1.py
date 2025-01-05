@@ -52,7 +52,7 @@ plt.plot(
     marker="o",
     linestyle="-",
     color="blue",
-    label="Shared Library: y vs. x",
+    label="sim",
 )
 
 # Plot the adjusted mathematical function
@@ -61,7 +61,7 @@ plt.plot(
     y_math,
     linestyle="--",
     color="red",
-    label=r"$y = x \cdot \cos^{-1}(1 + \ln(x))$",
+    label=r"Theory",
 )
 
 # Customize the plot
