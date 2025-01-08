@@ -78,19 +78,41 @@ Area under the curve is given by,
     A = \frac{4}{3} \brak{8 - 2\sqrt{2}}\\
     A = 6.895
 \end{align}
-\textbf{Computational Solution:} Trapezoidal method\\
-The difference equation for any general integral is as follows
-\begin{align}    
-\int_a^b f(x) \, dx \approx \frac{h}{2} \left[ f(x_0) + 2 \sum_{i=1}^{n-1} f(x_i) + f(x_n) \right]   
+\textbf{Computational Solution:} 
+Taking trapezoid-shaped strips of small area and adding them all up. Say we have to find the area of $y_{x}$ from $x = x_0$ to $x = x_n$, discretize the points on the $x$ axis $x_0, x_1, x_2, \dots, x_n$ such that they are equally spaced with the step size $h$. \\
+Sum of all trapezoidal areas is given by,
+\begin{align}
+  A &= \frac{1}{2}h\brak{y\brak{x_1}+y\brak{x_0}}+ \frac{1}{2}h\brak{y\brak{x_2}+y\brak{x_1}}+\dots+\frac{1}{2}h\brak{y\brak{x_n}+y\brak{x_{n-1}}}\\
+  &= h\sbrak{\frac{1}{2}\brak{y\brak{x_0}+y\brak{x_n}}+ y\brak{x_1}+\dots+y\brak{x_{n-1}}}
 \end{align}
-For n=1000,
-\begin{align}    
-\int\limits_2^4 f(y) \, dy \approx \frac{h}{2} \left[ (2\sqrt{y_0}) + 2 \sum_{i=1}^{999} (2\sqrt{y_i}) + (2\sqrt{y_{1000})} \right]   
+Let $A\brak{x_n}$ be the area enclosed by the curve $y\brak{x}$ from $x = x_0$ to $x = x_n$, $\brak{x_0, x_1, \dots x_n}$ be equidistant points with step-size $h$.
+\begin{align}
+  A\brak{x_n+h} = A\brak{x_n}+\frac{1}{2}h\brak{y\brak{x_n+h}+y\brak{x_n}}
 \end{align}
-'y' varies from 2 to 4 and x varies accordingly.\\
-The code sums up the required values iteratively for 'n'(say 1000) intervals\\
-By computing it iteratively(computationally) we get area as 6.895 sq. units \\
-Hence, the area we calculated theoretically is verified\\
+We can repeat this till we get the required area.\\
+Discretizing the steps, making $A\brak{x_n} = A_n, y\brak{x_n} = y_n$ we get,
+\begin{align}
+ A_{n+1} = A_n+\frac{1}{2}h\brak{y_{n+1}+y_n}
+\end{align}
+We can write $y_{n+1}$ in terms of $y_n$ using the first principle of derivative. $y_{n+1} = y_n + hy^{\prime}_n$
+\begin{align}
+  A_{n+1} &= A_n+\frac{1}{2}h\brak{\brak{y_{n}+hy^{\prime}_n}+y_n}\\
+  A_{n+1} &= A_n+\frac{1}{2}h\brak{2y_n+hy^{\prime}_n}\\
+  A_{n+1} &= A_n+hy_n+\frac{1}{2}h^2y^{\prime}_n\\
+  x_{n+1} &= x_n+h
+\end{align}
+In the given question, $y_n = \frac{x_n^2}{4}$ and $y^{\prime}_n = \frac{x_n}{2}$. \\
+The general difference equation will be given by
+\begin{align}
+  A_{n+1} &= A_n+hy_n+\frac{1}{2}h^2y^{\prime}_n\\
+  A_{n+1} &= A_n+h\brak{\frac{x_n^2}{4}}+\frac{1}{2}h^2\brak{\frac{x_n}{2}}\\
+  x_{n+1} &= x_n+h
+\end{align}
+Iterating till we reach $x_n = 4$ will return the required area. \\
+
+Area obtained computationally: $6.895$ sq. units.\\
+
+Area obtained theoretically: $\frac{4}{3} \brak{8 - 2\sqrt{2}}$ = 6.895 sq.units\\
 \begin{figure}[ht!]
    \centering
    \includegraphics[width=\columnwidth]{figs/Figure_1.png}

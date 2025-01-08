@@ -1,40 +1,53 @@
 #include <stdio.h>
 #include <math.h>
 
-// Function to calculate x = 2 * sqrt(y) based on x^2 = 4y
-double curve_function(double y) {
-    return 2 * sqrt(y);
+// Function to compute x-coordinates for a given y on the parabola y = x^2 / 4
+// Parameters:
+// y: y-coordinate
+// Returns: x-coordinate corresponding to the given y
+double parabola_x(double y) {
+    return sqrt(4.0 * y); // Calculate x using the inverse parabola equation
 }
 
-// Function to calculate the total area under the curve using the trapezoidal rule
-__attribute__((visibility("default")))
-__attribute__((used))
-double compute_total_area(double a, double b, int n) {
-    double h = (b - a) / n;  // Step size
-    double total_area = 0.0;
+// Function to calculate the area under the parabola
+// Parameters:
+// y1, y2: Limits of integration (start and end points on the y-axis)
+// n: Number of subdivisions for numerical integration
+// Returns: Calculated area
+double calculate_area(double y1, double y2, int n) {
+    double x1 = parabola_x(y1); // Find x for y = y1
+    double x2 = parabola_x(y2); // Find x for y = y2
+    double h = (y2 - y1) / n; // Step size for numerical integration
+    double area = 0.0; // Initialize area
 
-    // Calculate the total area using the trapezoidal rule
-    for (int i = 0; i < n; i++) {
-        double y1 = a + i * h;
-        double y2 = a + (i + 1) * h;
-        double x1 = curve_function(y1);
-        double x2 = curve_function(y2);
-        total_area += (x1 + x2) * h / 2.0;  // Add area of each trapezoid
+    // Perform trapezoidal integration
+    for (int i = 0; i <= n; i++) {
+        double y = y1 + i * h;  // Current y-coordinate
+        double x = parabola_x(y); // Corresponding x-coordinate on the parabola
+        double current_area = x;  // Width of the strip at the given y
+
+        if (i == 0 || i == n) { // Apply trapezoidal rule
+            area += current_area / 2.0; // Half-weight for the first and last terms
+        } else {
+            area += current_area; // Full weight for intermediate terms
+        }
     }
 
-    return total_area;
+    area *= h; // Multiply by step size to get the total area
+
+    return area; // Return the calculated area
 }
 
 int main() {
-    double a = 2.0;  // Lower limit for y
-    double b = 4.0;  // Upper limit for y
-    int n = 1000;    // Number of intervals
+    double y1 = 2.0; // Start y-coordinate (y = 2)
+    double y2 = 4.0; // End y-coordinate (y = 4)
+    int n = 1000;     // Number of subdivisions
 
-    // Compute the total area under the curve
-    double area = compute_total_area(a, b, n);
+    // Calculate the area
+    double area = calculate_area(y1, y2, n);
 
-    // Print the result
-    printf("The total area under the curve x^2 = 4y is: %.6f\n", area);
+    // Output the result
+    printf("The area under the parabola from y = 2 to y = 4 is approximately %.5f square units.\n", area);
 
     return 0;
 }

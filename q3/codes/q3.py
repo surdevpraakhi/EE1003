@@ -2,56 +2,63 @@ import ctypes
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Load the shared object file
-trapezoidal = ctypes.CDLL('./q3.so')
+# Load the shared library
+parabola_lib = ctypes.CDLL("./q3.so")
 
-# Set argument and return types for the compute_total_area function
-trapezoidal.compute_total_area.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_int]
-trapezoidal.compute_total_area.restype = ctypes.c_double
+# Define argument and return types for the functions
+parabola_lib.calculate_area.argtypes = [
+    ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.POINTER(ctypes.c_double)
+]
+parabola_lib.calculate_area.restype = ctypes.c_double
 
-# Define parameters
-a = 2.0  # Start of the interval for y
-b = 4.0  # End of the interval for y
-n = 1000  # Number of trapezoids
+# Variables for the function
+area = ctypes.c_double()
 
-# Call the compute_total_area function from the C library
-total_area = trapezoidal.compute_total_area(a, b, n)
+# Parameters for the parabola and integration limits
+y1 = 2.0  # Start y-coordinate (y = 2)
+y2 = 4.0  # End y-coordinate (y = 4)
+n = 1000   # Number of subdivisions for numerical integration
 
-# Print the total area
-print(f"Total area (sim): {total_area}")
+# Call the C function to calculate the area
+area_value = parabola_lib.calculate_area(y1, y2, n, ctypes.byref(area))
 
-# Plotting the curve x^2 = 4y
-y = np.linspace(a, b, 500)  # Generate y values
-x = 2 * np.sqrt(y)          # Calculate corresponding x values for the curve
+# Prepare data for plotting
+x_values = np.linspace(0, np.sqrt(4 * y2), 500)  # X values from 0 to sqrt(4 * 4)
+y_values = (x_values ** 2) / 4.0  # Parabola equation y = x^2 / 4
 
-# Create the plot
-plt.figure(figsize=(8, 6))
+# Plot the parabola
+plt.plot(x_values, y_values, label="Parabola (y = x^2 / 4)", color="blue")
 
-# Plot the curve
-plt.plot(x, y, label=r"$x^2 = 4y$", color="blue", linewidth=2)
+# Plot the horizontal lines y = 2 and y = 4 for shading the area
+plt.axhline(y=2, color='green', linestyle="--", label="y = 2")
+plt.axhline(y=4, color='red', linestyle="--", label="y = 4")
 
-# Highlight the lines y = 4 and y = 2
-plt.axhline(y=4, color="red", linestyle="--", label=r"$y = 4$")
-plt.axhline(y=2, color="green", linestyle="--", label=r"$y = 2$")
+# Shading the area between the parabola and horizontal lines y = 2 and y = 4
+y_shaded = np.linspace(y1, y2, 500)  # y-values from 2 to 4
+x_shaded_left = np.sqrt(4 * y_shaded)  # Left side of the parabola
+x_shaded_right = -np.sqrt(4 * y_shaded)  # Right side of the parabola (not used in first quadrant)
 
-# Fill the shaded region between the curve and y=4
-plt.fill_betweenx(y, 0, x, where=(y >= 2), color="lightblue", alpha=0.5)
+# Shade between y1 and y2 (between the parabola and horizontal lines)
+plt.fill_betweenx(y_shaded, 0, x_shaded_left, color="lightblue", alpha=0.5, label="Shaded Area")
 
-plt.xlabel("x", fontsize=12)
-plt.ylabel("y", fontsize=12)
-plt.legend(fontsize=12)
+# Add labels, legend, and title
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title(f"Area under the parabola from y = 2 to y = 4: {area_value:.5f} square units")
+plt.axhline(0, color="black", linewidth=0.5, linestyle="--")
+plt.axvline(0, color="black", linewidth=0.5, linestyle="--")
+plt.xlim(0, np.sqrt(4 * y2) + 1)
+plt.ylim(0, 5)
+plt.legend()
+plt.grid()
 
-# Add the area annotation at the top-right corner
-plt.text(
-    2.5, 4.1,  # Position: slightly above the top-right corner of the curve
-    f"sim Area = {total_area:.4f}", 
-    fontsize=12, 
-    color="black", 
-    ha="right", 
-    bbox=dict(facecolor='white', alpha=0.8)
-)
+# Annotate y = 2 and y = 4 on the plot
+plt.text(np.sqrt(4 * y2) - 0.5, 2, 'y = 2', color='green', verticalalignment='bottom')
+plt.text(np.sqrt(4 * y2) - 0.5, 4, 'y = 4', color='red', verticalalignment='top')
 
-# Display the plot
-plt.grid(True)
+# Save the plot
+plt.savefig("../figs/fig.png")
+
+# Show the plot
 plt.show()
 
