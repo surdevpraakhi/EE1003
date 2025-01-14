@@ -121,6 +121,130 @@ Alternatively, we can use the Secant method for solving equations.
 	x_{n+1} = x_n + f\brak{x_n}\frac{x_{n} -  x_{n-1}}{f(x_{n}) -  f(x_{n-1})}
 \end{align}
 Newton's method is very powerful but has the disadvantage that the derivative may sometimes be a far more difficult expression than \(f(x)\) itself and its evaluation therefore it may be more computationally expensive. The secant's method is more computationally cheap as the equation of the derivative is avoided by taking 2 starting points.\\ 
+
+
+Using \textbf{Eigen value} approach:
+\subsection*{Matrix-Based Method}
+For a polynomial equation of the form:
+\begin{align}
+    x^n + b_{n-1}x^{n-1} + \cdots + b_2x^2 + b_1x + b_0 = 0
+\end{align}
+we construct a matrix called the \textit{companion matrix}, which is defined as:
+\begin{align}
+    \Lambda =
+    \begin{bmatrix}
+        0 & 1 & 0 & \cdots & 0 \\
+        0 & 0 & 1 & \cdots & 0 \\
+        \vdots & \vdots & \vdots & \ddots & \vdots \\
+        0 & 0 & 0 & \cdots & 1 \\
+        -b_0 & -b_1 & -b_2 & \cdots & -b_{n-1}
+    \end{bmatrix}
+\end{align}
+
+The eigenvalues of this matrix are the roots of the given polynomial equation.
+
+For the quadratic equation $x^2 - 8x - 1280 = 0 $, we can write it as:
+\begin{align}
+    x^2 + (-8)x + (-1280) = 0
+\end{align}
+The coefficients are:
+\begin{align}
+    b_1 = -8, \quad b_0 = -1280
+\end{align}
+The companion matrix for this equation is:
+\begin{align}
+    \Lambda =
+    \begin{bmatrix}
+        0 & 1 \\
+        -(-1280) & -(-8)
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        0 & 1 \\
+        1280 & 8
+    \end{bmatrix}
+\end{align}
+\subsection*{Eigenvalue Computation}
+The eigenvalues of \( \Lambda \) are obtained by solving:
+\begin{align}
+    \det(\Lambda - \lambda I) = 0
+\end{align}
+Substitute \( \Lambda \):
+\begin{align}
+    \begin{vmatrix}
+        0 - \lambda & 1 \\
+        1280 & 8 - \lambda
+    \end{vmatrix}
+    = 0
+\end{align}
+Simplify the determinant:
+\begin{align}
+    (-\lambda)(8 - \lambda) - (1280)(1) = 0 \\
+    \lambda^2 - 8\lambda - 1280 = 0
+\end{align}
+This is the original quadratic equation, so the eigenvalues are the roots itself:
+\begin{align}
+    \lambda_1 = 40, \quad \lambda_2 = -32
+\end{align}
+\section*{QR Algorithm for Finding Eigenvalues and Roots of a Quadratic Equation}
+
+Consider the quadratic equation:
+\[
+x^2 - 8x - 1280 = 0
+\]
+We aim to find its roots using the QR algorithm, which finds the eigenvalues of the companion matrix of the quadratic polynomial.
+
+\subsection*{1. Companion Matrix of the Polynomial}
+The companion matrix \( \Lambda \) of the polynomial \( x^2 - 8x - 1280 \) is given by:
+\[
+\Lambda 
+= \begin{pmatrix}
+0 & 1 \\
+1280 & 8
+\end{pmatrix}
+\]
+This matrix represents the system that corresponds to the given polynomial.
+\subsection*{2. QR Decomposition}
+The QR algorithm starts by performing QR decomposition on the matrix \( \Lambda \). The goal is to decompose \( \Lambda \) into an orthogonal matrix \( Q \) and an upper triangular matrix \( R \), such that:
+\[
+\Lambda = QR
+\]
+where \( Q^T Q = I \), and \( R \) is upper triangular. Then, we form a new matrix \( \Lambda' \) as:
+\[
+\Lambda' = RQ
+\]
+This process is repeated iteratively until \( \Lambda' \) converges to an upper triangular matrix whose diagonal elements are the eigenvalues of \( \Lambda \), which correspond to the roots of the quadratic equation.
+
+\subsection*{3. Iterative Process}
+Let's outline the iterative steps for the QR algorithm applied to this companion matrix.
+
+\subsubsection*{First Iteration:}
+We start with \( \Lambda_0 = \begin{pmatrix} 0 & 1 \\ 1280 & 8 \end{pmatrix} \).
+
+Perform the QR decomposition of \( \Lambda_0 \):
+\[
+\Lambda_0 = QR
+\]
+Let's calculate \( Q \) and \( R \), then form \( \Lambda_1 = RQ \).
+
+\subsubsection*{Subsequent Iterations:}
+Repeat the QR decomposition on the new matrix \( \Lambda_1 \), then form \( \Lambda_2 = RQ \), and so on, until the matrix \( \Lambda_k \) converges to an upper triangular form. The diagonal elements of this matrix represent the eigenvalues of \( \Lambda_0 \), which are the roots of the quadratic equation.
+
+\subsection*{4. Eigenvalues and Roots}
+After sufficient iterations, the QR algorithm will converge to an upper triangular matrix where the diagonal entries are the eigenvalues. These eigenvalues correspond to the roots of the polynomial. In this case, the eigenvalues of the companion matrix \( \Lambda \) will give us the roots of the quadratic equation \( x^2 - 8x - 1280 = 0 \).
+
+Thus, the eigenvalues (roots) are the solutions to the quadratic equation:
+\[
+x = \frac{8 \pm \sqrt{8^2 - 4(1)(-1280)}}{2(1)} = \frac{8 \pm \sqrt{64 + 5120}}{2} = \frac{8 \pm \sqrt{5184}}{2}
+\]
+\[
+x = \frac{8 \pm 72}{2}
+\]
+Hence, the roots are:
+\[
+x_1 = 40, \quad x_2 = -32
+\]
+As we have to find out the speed of train so, I took a positive value i.e $40$ km/h and this root is plotted below:
 \begin{figure}[!ht]
 		\centering
 		\includegraphics[width=\columnwidth]{figs/Figure_1.png}
