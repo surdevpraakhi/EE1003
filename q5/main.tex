@@ -121,7 +121,12 @@ Alternatively, we can use the Secant method for solving equations.
 	x_{n+1} = x_n + f\brak{x_n}\frac{x_{n} -  x_{n-1}}{f(x_{n}) -  f(x_{n-1})}
 \end{align}
 Newton's method is very powerful but has the disadvantage that the derivative may sometimes be a far more difficult expression than \(f(x)\) itself and its evaluation therefore it may be more computationally expensive. The secant's method is more computationally cheap as the equation of the derivative is avoided by taking 2 starting points.\\ 
-
+\begin{figure}[!ht]
+		\centering
+		\includegraphics[width=\columnwidth]{figs/Figure_1.png}
+		\caption{Solution of the given function}
+		\label{stemplot}
+	\end{figure}
 
 Alternatively, QR decomposition on Hessenberg matrix:\\
 The QR decomposition method is a numerical algorithm to compute the eigenvalues of a matrix \( A \). By iteratively factorizing the matrix \( A \) into the product of an orthogonal matrix \( Q \) and an upper triangular matrix \( R \), and then recombining them in a specific order, the process converges to a diagonal matrix whose diagonal entries are the eigenvalues of \( A \).
@@ -194,10 +199,10 @@ The eigenvalues of the companion matrix \( A \) correspond to the roots of the q
 \section*{Conclusion}
 The QR decomposition method applied to the companion matrix of \( x^2 - 8x - 1280 = 0 \) numerically finds the roots of the equation. The iterative process demonstrates how eigenvalue computation can be used effectively to determine the roots without relying on direct formulas.
 
-As we have to find the \textbf{speed} of the train, out of obtained two roots we considered only positive root i.e $40$ km/h and it is plotted below:
+
 \begin{figure}[!ht]
 		\centering
-		\includegraphics[width=\columnwidth]{figs/Figure_1.png}
+		\includegraphics[width=\columnwidth]{figs/Figure_2.png}
 		\caption{Solution of the given function}
 		\label{stemplot}
 	\end{figure}
