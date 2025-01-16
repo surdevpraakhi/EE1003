@@ -39,6 +39,7 @@
 \usepackage{tikz}
 \usepackage{circuitikz}
 \usepackage{standalone} % For including external TikZ files
+\usepackage{float}
 
 \begin{document}
 
@@ -121,7 +122,7 @@ Alternatively, we can use the Secant method for solving equations.
 	x_{n+1} = x_n + f\brak{x_n}\frac{x_{n} -  x_{n-1}}{f(x_{n}) -  f(x_{n-1})}
 \end{align}
 Newton's method is very powerful but has the disadvantage that the derivative may sometimes be a far more difficult expression than \(f(x)\) itself and its evaluation therefore it may be more computationally expensive. The secant's method is more computationally cheap as the equation of the derivative is avoided by taking 2 starting points.\\ 
-\begin{figure}[!ht]
+\begin{figure}[H]
 		\centering
 		\includegraphics[width=\columnwidth]{figs/Figure_1.png}
 		\caption{Solution of the given function}
