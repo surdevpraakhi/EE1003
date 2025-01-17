@@ -168,7 +168,24 @@ From the second row:
 \end{align}
 
 \section*{Conclusion}
-The LU decomposition process reveals that the system is \textbf{inconsistent}. The matrix \(A\) is singular (its determinant is zero), and the system does not have a solution. The inconsistency arises because the equations contradict each other.
+The LU decomposition process reveals that the system is \textbf{inconsistent}. The matrix \(A\) is singular (its determinant is zero), and the system does not have a solution. The inconsistency arises because the equations contradict each other.\\
+\textbf{LU Decomposition computation}\\
+The LU decomposition can be efficiently computed using Doolittle's algorithm. This method generates the matrices \( L \) (lower triangular) and \( U \) (upper triangular) such that \( A = LU \). The elements of these matrices are calculated as follows: \\
+Elements of the \( U \) Matrix:  \\
+For each column \( j \):
+\begin{align}
+	U_{ij} &= A_{ij} \quad \text{if } i = 0, \\
+	U_{ij} &= A_{ij} - \sum_{k=0}^{i-1} L_{ik} U_{kj} \quad \text{if } i > 0.
+\end{align}
+Elements of the \( L \) Matrix: \\
+For each row \( i \):
+\begin{align}
+	L_{ij} &= \frac{A_{ij}}{U_{jj}} \quad \text{if } j = 0, \\
+	L_{ij} &= \frac{A_{ij} - \sum_{k=0}^{j-1} L_{ik} U_{kj}}{U_{jj}} \quad \text{if } j > 0.
+\end{align}
+
+This systematic approach ensures that the matrix \( A \) is decomposed into \( L \) and \( U \) without requiring row swaps, provided \( A \) is nonsingular.
+
 \begin{figure}[!ht]
 		\centering
 		\includegraphics[width=\columnwidth]{figs/Figure_1.png}
