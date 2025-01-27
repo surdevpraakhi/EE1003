@@ -69,123 +69,202 @@ A fair coin with 1 marked on one face and 6 on the other and a fair die are both
 The probability of a given event $A$ (where $A$: Sum of the numbers is 12) is computed by considering the mutual independence of the coin and the die. Since the coin and die are independent events, we calculate the probability of each event separately and then multiply them.
 
 The probability of the coin showing 6 is:
-\[
-P(\text{Coin} = 6) = \frac{1}{2}
-\]
+\begin{align}
+P(\text{Coin} = 6) &= \frac{1}{2}
+\end{align}
 The probability of the die showing 6 is:
-\[
-P(\text{Die} = 6) = \frac{1}{6}
-\]
+\begin{align}
+P(\text{Die} = 6) &= \frac{1}{6}
+\end{align}
 
 Since the events are independent, the probability of both events happening together is:
-\[
-P(A) = P(\text{Coin} = 6) \times P(\text{Die} = 6) = \frac{1}{2} \times \frac{1}{6} = \frac{1}{12}.
-\]
+\begin{align}
+P(A) &= P(\text{Coin} = 6) \times P(\text{Die} = 6) \\
+     &= \frac{1}{2} \times \frac{1}{6} = \frac{1}{12}.
+\end{align}
+
+\textbf{Computational Solution:}
 
 
-\textbf{Computational solution: }
-\section*{Computation of Probabilities for Tossing a Coin and Rolling a Die}
-
-To compute the probability of obtaining specific outcomes when tossing a fair coin and rolling a six-sided die, we rely on two key concepts: the **Probability Mass Function (PMF)** and the **Cumulative Distribution Function (CDF)**.
+To compute the probabilities for tossing a fair coin and rolling a six-sided die, we rely on the **Probability Mass Function (PMF)** and **Cumulative Distribution Function (CDF)** with additional utilization of the **Z-transform** to derive results analytically.
 
 \subsection*{Definitions}
 \subsubsection*{Probability Mass Function (PMF)}
-The PMF represents the probability of each individual outcome in the sample space $S$. For the coin:
-\[
-C = \{1, 6\}
-\]
-and for the die:
-\[
-D = \{1, 2, 3, 4, 5, 6\}.
-\]
+The PMF, denoted as $P_{\vec{Z}}(z)$, represents the probability of obtaining a specific value $z$ in the sample space of $\vec{Z}$. For the experiment:
+\begin{align}
+\vec{Z} = \vec{X} + \vec{Y},
+\end{align}
+where:
+\begin{align}
+\vec{X} &\in \{1, 6\} \quad \text{and} \quad \vec{Y} \in \{1, 2, 3, 4, 5, 6\}.
+\end{align}
 The combined sample space is:
-\[
-S = \{(c, d) \mid c \in C, d \in D\},
-\]
-with the total number of outcomes:
-\[
-|S| = |C| \times |D| = 2 \times 6 = 12.
-\]
-The PMF is given as:
-\[
-P((c, d)) = \frac{1}{12}, \quad \forall (c, d) \in S.
-\]
+\begin{align}
+S = \{(x, y) \mid x \in \{1, 6\}, y \in \{1, 2, 3, 4, 5, 6\}\},
+\end{align}
+with $|S| = 12$ total outcomes.
+
+The PMF is then given by:
+\begin{align}
+    P_{\vec{Z}}(z) &=
+    \begin{cases}
+        \frac{1}{12}, & z \in \{2, 3, 4, 5, 6, 8, 9, 10, 11, 12\}, \\
+        \frac{1}{6}, & z = 7, \\
+        0, & \text{otherwise}.
+    \end{cases}
+\end{align}
+
+For the sum $\vec{Z}$ to equal 7, there are exactly two favorable outcomes in the sample space:
+\begin{align}
+\{(1, 6), (6, 1)\}.
+\end{align}
+Thus, the probability for $P_{\vec{Z}}(7)$ is:
+\begin{align}
+P_{\vec{Z}}(7) &= \frac{\text{Favorable outcomes}}{\text{Total outcomes}} \\
+     &= \frac{2}{12} = \frac{1}{6}.
+\end{align}
+
+For example, the value of $\vec{Z}$ is obtained by summing the outcomes of the coin and the die. Each specific value $z$ corresponds to a distinct event in $S$. 
+
+The distribution can also be summarized as:
+\begin{itemize}
+    \item $P_{\vec{Z}}(2) = \frac{1}{12}$
+    \item $P_{\vec{Z}}(3) = \frac{1}{12}$
+    \item $\vdots$
+    \item $P_{\vec{Z}}(7) = \frac{1}{6}$
+    \item $\vdots$
+    \item $P_{\vec{Z}}(12) = \frac{1}{12}$
+\end{itemize}
+
+\noindent where all $P_{\vec{Z}}(z)$ sum to 1, as expected:
+\begin{align}
+\sum_{z \in \{2, 3, \dots, 12\}} P_{\vec{Z}}(z) = 1.
+\end{align}
+
 
 \subsubsection*{Cumulative Distribution Function (CDF)}
-The CDF represents the cumulative probability of outcomes up to a given sum $x$, defined as:
-\[
-F(x) = P(\text{Sum} \leq x) = \sum_{\text{Sum} \leq x} P((c, d)).
-\]
-For this experiment:
-\[
-F(x) = 
+The CDF, $F_{\vec{Z}}(z)$, represents the cumulative probability of $\vec{Z}$ up to a given value $z$:
+\begin{align}
+F_{\vec{Z}}(z) &= P(\vec{Z} \leq z) = \sum_{k=2}^{z} P_{\vec{Z}}(k),
+\end{align}
+where $z \in \{2, 3, \dots, 12\}$. Beyond $z = 12$, the CDF is 1:
+\begin{align}
+F_{\vec{Z}}(z) = 
 \begin{cases} 
-0, & x < 2, \\
-\frac{\text{Number of outcomes where Sum} \leq x}{12}, & 2 \leq x \leq 12, \\
-1, & x > 12.
+0, & z < 2, \\
+\sum_{k=2}^{z} P_{\vec{Z}}(k), & 2 \leq z \leq 12, \\
+1, & z > 12.
 \end{cases}
-\]
+\end{align}
 
-\subsection*{Simulation Process}
-We simulate the tossing of the coin and rolling of the die using the following steps:
+\subsubsection*{Z-transform Representation}
+The Z-transform provides an analytical tool to compute the PMF for discrete random variables. It is defined as:
+\begin{align}
+\mathcal{Z}[P_{\vec{Z}}(z)] = G_{\vec{Z}}(z) = \sum_{k=2}^{12} P_{\vec{Z}}(k) z^{-k},
+\end{align}
+where $G_{\vec{Z}}(z)$ is the generating function for $P_{\vec{Z}}(z)$.
+
+\subsection*{Computational Process}
+
+\subsubsection*{Step 1: PMF of $\vec{X}$ and $\vec{Y}$}
+For the coin toss ($\vec{X}$):
+\begin{align}
+P_{\vec{X}}(x) &= 
+\begin{cases} 
+\frac{1}{2}, & x \in \{1, 6\}, \\
+0, & \text{otherwise}.
+\end{cases}
+\end{align}
+
+For the die roll ($\vec{Y}$):
+\begin{align}
+P_{\vec{Y}}(y) &= 
+\begin{cases} 
+\frac{1}{6}, & y \in \{1, 2, 3, 4, 5, 6\}, \\
+0, & \text{otherwise}.
+\end{cases}
+\end{align}
+
+\subsubsection*{Step 2: Z-transform of PMFs}
+The Z-transform for $\vec{X}$ is:
+\begin{align}
+G_{\vec{X}}(z) &= \sum_{x \in \{1, 6\}} P_{\vec{X}}(x) z^{-x} \\
+     &= \frac{1}{2} z^{-1} + \frac{1}{2} z^{-6}.
+\end{align}
+
+The Z-transform for $\vec{Y}$ is:
+\begin{align}
+G_{\vec{Y}}(z) &= \sum_{y=1}^{6} P_{\vec{Y}}(y) z^{-y} \\
+     &= \frac{1}{6} (z^{-1} + z^{-2} + z^{-3} + z^{-4} + z^{-5} + z^{-6}).
+\end{align}
+
+\subsubsection*{Step 3: Z-transform of $\vec{Z} = \vec{X} + \vec{Y}$}
+The PMF of $\vec{Z}$ is derived by multiplying the Z-transforms of $\vec{X}$ and $\vec{Y}$:
+\begin{align}
+G_{\vec{Z}}(z) &= G_{\vec{X}}(z) \cdot G_{\vec{Y}}(z).
+\end{align}
+
+Substituting $G_{\vec{X}}(z)$ and $G_{\vec{Y}}(z)$:
+\begin{align}
+G_{\vec{Z}}(z) &= \left(\frac{1}{2} z^{-1} + \frac{1}{2} z^{-6}\right) \cdot \frac{1}{6} (z^{-1} + z^{-2} + z^{-3} + z^{-4} + z^{-5} + z^{-6}).
+\end{align}
+
+Simplifying:
+\begin{align}
+G_{\vec{Z}}(z) &= \frac{1}{12} \left(z^{-2} + z^{-3} + z^{-4} + z^{-5} + z^{-6} + z^{-7} + z^{-7} + z^{-8} + z^{-9} + z^{-10} + z^{-11} + z^{-12}\right).
+\end{align}
+
+The coefficients of $z^{-k}$ in $G_{\vec{Z}}(z)$ give $P_{\vec{Z}}(k)$. For example:
+\begin{align}
+P_{\vec{Z}}(12) &= \text{Coefficient of } z^{-12} = \frac{1}{12}.
+\end{align}
+
+\subsubsection*{Step 4: CDF of $\vec{Z}$}
+The CDF, $F_{\vec{Z}}(z)$, is obtained by summing the PMF values:
+\begin{align}
+F_{\vec{Z}}(z) &= \sum_{k=2}^{z} P_{\vec{Z}}(k).
+\end{align}
+
+For example:
+\begin{align}
+F_{\vec{Z}}(12) &= \sum_{k=2}^{12} P_{\vec{Z}}(k) = 1.
+\end{align}
+
+\subsection*{Conclusion}
+Using the Z-transform, we analytically derive the PMF and compute the probability of obtaining a sum of $12$:
+\begin{align}
+P_{\vec{Z}}(12) &= \frac{1}{12}.
+\end{align}
+
+\textbf{Simulation:} \\
 \begin{enumerate}
-    \item A coin produces outcomes in the set:
-    \[
-    C = \{1, 6\}.
-    \]
-    \item A die produces outcomes in the set:
-    \[
-    D = \{1, 2, 3, 4, 5, 6\}.
-    \]
-    \item For each simulated trial, a random integer \( C \) is generated for the coin, such that \( C \in \{1, 6\} \), using a random number generator function:
-    \[
-    C = (\text{rand()} \mod 2) + 1.
-    \]
-    \item A random integer \( D \) is generated for the die, such that \( D \in \{1, 2, 3, 4, 5, 6\} \), using another random number generator function:
-    \[
-    D = (\text{rand()} \mod 6) + 1.
-    \]
-    \item The sum of the coin and die outcomes is calculated for each trial:
-    \[
-    \text{Sum} = C + D.
-    \]
-    \item The number of occurrences where the sum equals $12$ is tracked over \( N \) trials, where \( N \) is the total number of simulations.
-    \item The probability of obtaining a sum of $12$ is then computed by dividing the number of successful trials (where the sum equals $12$) by the total number of trials \( N \).
+    \item Generate a random number for the coin toss using the \textbf{rand()} function.
+    \item Restrict the random number to either $1$ or $6$ by using the \textbf{rand()} \% 2 operator and then assign it to the variable \textbf{coin}, where:
+    \begin{itemize}
+        \item If the random number is $0$, assign \textbf{coin} = 1.
+        \item If the random number is $1$, assign \textbf{coin} = 6.
+    \end{itemize}
+    \item Generate a random number for the die roll using the \textbf{rand()} function.
+    \item Restrict the random number to the range from 1 to 6 by using \textbf{rand()} \% 6 + 1, and assign it to the variable \textbf{die}.
+    \item Now, calculate the sum of the \textbf{coin} and \textbf{die} (i.e., $\vec{Z} = \vec{X} + \vec{Y}$).
+    \item Count the number of times the sum $\vec{Z}$ equals a specific value (for example, 12) by iterating this process for a large number of trials.
+    \item Divide the number of favourable outcomes (where the sum equals the target value) by the total number of trials to get the desired PMF for that sum.
+    \item The CDF can then be simulated by summing the required PMFs.
 \end{enumerate}
 
-\subsection*{Calculation of Probabilities}
-\subsubsection*{Probability of Each Outcome (PMF)}
-The probability of obtaining each sum $i$ (\( i \in \{2, 3, \ldots, 12\} \)) is computed as:
-\[
-P(i) = \frac{\text{Number of occurrences of Sum} = i}{N}.
-\]
-
-\subsubsection*{Cumulative Probability (CDF)}
-The cumulative probability up to sum $i$ is:
-\[
-F(i) = \sum_{k=2}^{i} P(k).
-\]
-
-\subsubsection*{Probability of Sum = 12}
-The probability of obtaining a sum of 12 is determined by counting the favorable outcomes where both the coin and die show 6. Given that the coin has two possible outcomes \( \{1, 6\} \) and the die has six possible outcomes \( \{1, 2, 3, 4, 5, 6\} \), the only favorable combination is when both show 6.
-
-Therefore, the probability is:
-
-\[
-P(\text{Sum} = 12) = \frac{1}{12}.
-\]
 
 
-\subsection*{Output Representation}
-The computed probabilities are represented in two forms:
-\begin{itemize}
-    \item **PMF**: The probabilities of obtaining each sum $\{2, 3, \ldots, 12\}$.
-    \item **CDF**: The cumulative probabilities up to each sum, showing the cumulative likelihood of outcomes.
-\end{itemize}
-\begin{figure}[!ht]
-		\centering
-		\includegraphics[width=\columnwidth]{figs/Figure_1.png}
-		\caption{Solution of the system of linear equations}
-		\label{stemplot}
-	\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{figs/pmf.png}
+\caption{Probability Mass Funtion}
+\label{fig:Plot1} 
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{figs/cdf.png}
+\caption{Cumulative Distribution Function}
+\label{fig:Plot1} 
+\end{figure}
 \end{document}
